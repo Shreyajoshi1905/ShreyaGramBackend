@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ShreyaGramBackend.Data;
 using ShreyaGramBackend.Services.Authentication;
+using ShreyaGramBackend.Services.Blogs;
+
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
@@ -30,8 +32,8 @@ builder.Services.AddAuthentication( x=>{
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = "http://localhost:4200",
-                ValidAudience = "login",
+                ValidIssuer = "https://localhost:5132",
+                ValidAudience = "https://localhost:5132/api",
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my top secret key")),
 };
 });
@@ -45,6 +47,7 @@ builder.Services.AddSwaggerGen();
 
 //builder.Services.AddScoped<ISignUpService, SignUpService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IBlogsService , BlogsService>();
 
 var app = builder.Build();
 

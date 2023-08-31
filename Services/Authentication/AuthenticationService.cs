@@ -34,7 +34,7 @@ namespace ShreyaGramBackend.Services.Authentication
                 _dbcontext.User.Add(signupmodel);
                 await _dbcontext.SaveChangesAsync();
                 //serviceresponse.Data = await _dbcontext.User.ToListAsync();
-                serviceresponse.Message = "login added succesfully";
+                serviceresponse.Message = "signup done succesfully";
                 serviceresponse.Success = true;
             }
             
@@ -50,16 +50,17 @@ namespace ShreyaGramBackend.Services.Authentication
                 SignUpModel creds = _dbcontext.User.FirstOrDefault(u => u.UserName == UserName);
                 if(creds == null){
                     serviceresponse.Success = false;
+                    serviceresponse.Message= "creds are wrong";
                 }
                 if(!BCrypt.Net.BCrypt.Verify(Password, creds.PasswordHash)){
                     serviceresponse.Success = false;
-                    Console.WriteLine("not verified ");
+                    serviceresponse.Message = "creds are wrong";
                 }
                 else{
-                    Console.WriteLine("verified");
                     string token = createToken(UserName , Password);
                     serviceresponse.Message = token;
                     serviceresponse.Success = true;
+                    
                 }
             }
             catch(Exception ex){
@@ -70,9 +71,10 @@ namespace ShreyaGramBackend.Services.Authentication
         }
 
         private string createToken(string UserName , string Password){
-            List<Claim> claims = new()
+            List<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name , UserName)
+                new Claim(ClaimTypes.Name , UserName),
+                new Claim(ClaimTypes.Role , "Admin")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
@@ -80,9 +82,8 @@ namespace ShreyaGramBackend.Services.Authentication
                 var creds = new SigningCredentials(key  , SecurityAlgorithms.HmacSha512Signature);
                 var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddDays(7),
                 signingCredentials: creds
-
             );
 
             var jwt  = new JwtSecurityTokenHandler().WriteToken(token);
