@@ -31,11 +31,12 @@ namespace ShreyaGramBackend.Services.Authentication
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(Password);
                 signupmodel.UserName = UserName;
                 signupmodel.PasswordHash = passwordHash;
-                _dbcontext.User.Add(signupmodel);
+                _dbcontext.Users.Add(signupmodel);
                 await _dbcontext.SaveChangesAsync();
                 //serviceresponse.Data = await _dbcontext.User.ToListAsync();
                 serviceresponse.Message = "signup done succesfully";
                 serviceresponse.Success = true;
+
             }
             
             catch(Exception ex){
@@ -44,10 +45,10 @@ namespace ShreyaGramBackend.Services.Authentication
             }
             return serviceresponse;
         }
-        public async Task <ServiceResponse<List<LoginModel>>>VerifyLogin (string UserName , string Password){
+        public async Task <ServiceResponse<List<LoginModel>>>VerifyLogin(string UserName , string Password){
             var serviceresponse = new ServiceResponse<List<LoginModel>>();
             try{
-                SignUpModel creds = _dbcontext.User.FirstOrDefault(u => u.UserName == UserName);
+                SignUpModel creds = _dbcontext.Users.FirstOrDefault(u => u.UserName == UserName);
                 if(creds == null){
                     serviceresponse.Success = false;
                     serviceresponse.Message= "creds are wrong";
@@ -55,40 +56,49 @@ namespace ShreyaGramBackend.Services.Authentication
                 if(!BCrypt.Net.BCrypt.Verify(Password, creds.PasswordHash)){
                     serviceresponse.Success = false;
                     serviceresponse.Message = "creds are wrong";
+
                 }
                 else{
-                    string token = createToken(UserName , Password);
+                    string token = createToken(UserName);
                     serviceresponse.Message = token;
                     serviceresponse.Success = true;
-                    
                 }
             }
             catch(Exception ex){
                 serviceresponse.Message = ex.Message;
             }
-            
             return serviceresponse;
         }
 
-        private string createToken(string UserName , string Password){
-            List<Claim> claims = new List<Claim>()
+       private string createToken(string UserName)
+        {
+            Claim[] claims = new Claim[]
             {
-                new Claim(ClaimTypes.Name , UserName),
+                new Claim(ClaimTypes.Email , UserName),
                 new Claim(ClaimTypes.Role , "Admin")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                _config.GetSection("AppSettings:Token").Value!));
-                var creds = new SigningCredentials(key  , SecurityAlgorithms.HmacSha512Signature);
-                var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddDays(7),
-                signingCredentials: creds
-            );
+                _config.GetSection("Jwt:Key").Value!));
+            var tokenHandler = new JwtSecurityTokenHandler();
 
-            var jwt  = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwt;
-            }
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                new Claim(ClaimTypes.Email, UserName),
+                new Claim(ClaimTypes.Role, "Admin"),
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(
+                    key,
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+              var token = tokenHandler.CreateToken(tokenDescriptor);
+              Console.WriteLine("hii"+tokenHandler.WriteToken(token));
+              return tokenHandler.WriteToken(token);
+        }
+    
 }}
            
 //         }

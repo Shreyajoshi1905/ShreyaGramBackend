@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using ShreyaGramBackend.Data;
 using ShreyaGramBackend.Services.Authentication;
 using ShreyaGramBackend.Services.Blogs;
+using ShreyaGramBackend.Services.Book;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -48,6 +49,8 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<ISignUpService, SignUpService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IBlogsService , BlogsService>();
+builder.Services.AddScoped<IBookService , BookService>();
+
 
 var app = builder.Build();
 

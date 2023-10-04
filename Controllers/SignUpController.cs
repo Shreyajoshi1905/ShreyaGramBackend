@@ -22,7 +22,10 @@ namespace ShreyaGramBackend.Controllers
         public async Task<ActionResult<List<SignUpModel>>>SignUp( LoginModel values){
             return Ok(await _authservice.SaveSignUpInfo(values.UserName , values.Password) );
         }
+//[Authorize]
+//[Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("Login")]
+        
         public async Task<ActionResult<List<LoginModel>>>VerifyLogin (LoginModel loginValues){
             return Ok(await _authservice.VerifyLogin(loginValues.UserName ,loginValues.Password));
         }

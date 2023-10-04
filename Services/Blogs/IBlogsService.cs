@@ -8,7 +8,17 @@ namespace ShreyaGramBackend.Services.Blogs
 {
     public interface IBlogsService
     {
-        Task <ServiceResponse<List<BlogsModel>>> PostBlogs(BlogsModel blog ,string httpHeaderToken );
+        Task <ServiceResponse<List<ClientBlogModel>>> PostBlogs(ClientBlogModel blog);
         //Task <ServiceResponse<List<BlogsModel>>> GetBlogs();
-    }
+
+        Task <ServiceResponse<List<ClientBlogModel>>>GetAllBlogs();
+
+        Task<ServiceResponse<List<ClientBlogModel>>>GetBlogByUserName(string userAuthor);
+        Task<string>DeleteBlogById(int blogid);
+        Task<ServiceResponse<ClientBlogModel>>GetBlogById(int BlogId);
+        Task<ServiceResponse<ClientBlogModel>>EditBlogById(int BlogId ,ClientBlogModel updatedData);
+        
+
+
+    }   
 }

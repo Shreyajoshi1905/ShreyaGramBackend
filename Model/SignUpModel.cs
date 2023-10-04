@@ -12,6 +12,6 @@ namespace ShreyaGramBackend.Model
         public int Id { get; set; }
         public string UserName { get; set; }  = null!;
         public string PasswordHash {get; set;} = null!;
-        public ICollection<BlogsModel> Blogs { get; set; }  = null!;
+        //public ICollection<BlogsModel> Blogs { get; set; }  = null!;
     }
 }

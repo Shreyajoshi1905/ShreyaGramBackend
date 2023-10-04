@@ -10,14 +10,17 @@ namespace ShreyaGramBackend.Data
     public class DataContext: DbContext
     {
         public DataContext(DbContextOptions<DataContext> options):base(options){}
-        public DbSet<SignUpModel> User{get;set;}
-        public DbSet<BlogsModel>Blogs{get;set;}
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<BlogsModel>()
-                .HasOne(b => b.Author)
-                .WithMany(u => u.Blogs)
-                .HasForeignKey(b => b.UserId);
-        }
+        public DbSet<SignUpModel> Users{get;set;}
+        
+        //public DbSet<BlogsModel>Blogs{get;set;}
+        public DbSet<ClientBlogModel>BlogsTable{get;set;}
+        public DbSet<BookModel> Books{get;set;}
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     modelBuilder.Entity<BlogsModel>()
+        //         .HasOne(b => b.Author)
+        //         .WithMany(u => u.Blogs)
+        //         .HasForeignKey(b => b.UserId);
+        // }
     }
 }
