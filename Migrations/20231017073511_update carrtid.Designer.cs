@@ -12,8 +12,8 @@ using ShreyaGramBackend.Data;
 namespace ShreyaGramBackend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230924162902_add book table")]
-    partial class addbooktable
+    [Migration("20231017073511_update carrtid")]
+    partial class updatecarrtid
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,6 +53,33 @@ namespace ShreyaGramBackend.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("ShreyaGramBackend.Model.CartModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CartId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Paymentdetails")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CartTest");
+                });
+
             modelBuilder.Entity("ShreyaGramBackend.Model.ClientBlogModel", b =>
                 {
                     b.Property<int>("BlogId")
@@ -81,6 +108,34 @@ namespace ShreyaGramBackend.Migrations
                     b.ToTable("BlogsTable");
                 });
 
+            modelBuilder.Entity("ShreyaGramBackend.Model.ProductDetailsModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CartId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CartId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId1");
+
+                    b.ToTable("ProductDetailsCart");
+                });
+
             modelBuilder.Entity("ShreyaGramBackend.Model.SignUpModel", b =>
                 {
                     b.Property<int>("Id")
@@ -100,6 +155,22 @@ namespace ShreyaGramBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ShreyaGramBackend.Model.ProductDetailsModel", b =>
+                {
+                    b.HasOne("ShreyaGramBackend.Model.CartModel", "Cart")
+                        .WithMany("ProductDetails")
+                        .HasForeignKey("CartId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+                });
+
+            modelBuilder.Entity("ShreyaGramBackend.Model.CartModel", b =>
+                {
+                    b.Navigation("ProductDetails");
                 });
 #pragma warning restore 612, 618
         }

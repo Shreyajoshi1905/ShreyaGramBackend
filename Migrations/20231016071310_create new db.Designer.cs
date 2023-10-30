@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShreyaGramBackend.Data;
 
@@ -11,9 +12,11 @@ using ShreyaGramBackend.Data;
 namespace ShreyaGramBackend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231016071310_create new db")]
+    partial class createnewdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,11 +116,7 @@ namespace ShreyaGramBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CartId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CartId1")
+                    b.Property<int>("CartId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
@@ -128,7 +127,7 @@ namespace ShreyaGramBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId1");
+                    b.HasIndex("CartId");
 
                     b.ToTable("ProductDetailsCart");
                 });
@@ -158,7 +157,7 @@ namespace ShreyaGramBackend.Migrations
                 {
                     b.HasOne("ShreyaGramBackend.Model.CartModel", "Cart")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("CartId1")
+                        .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

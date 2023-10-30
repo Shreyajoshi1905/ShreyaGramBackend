@@ -27,5 +27,19 @@ namespace ShreyaGramBackend.Controllers
         public async Task<ActionResult<List<BookModel>>>GetAllBooks(){
             return Ok(await _bookservice.GetAllBooks());
         }
+
+        [HttpGet("getbookbyid")]
+        public async Task<ActionResult<List<BookModel>>>GetBookById([FromQuery] int bookId){
+            return Ok(await _bookservice.GetBookById(bookId));
+        }
+        [HttpPost("createcart")]
+        public async Task<ActionResult<List<BookModel>>>CreateCart(string userName){
+            return Ok(await _bookservice.CreateCart(userName));
+        }
+
+        [HttpPost("addtocart")]
+        public async Task<ActionResult<List<BookModel>>>AddToCart([FromBody] CartRequestModel cartRequest){
+            return Ok(await _bookservice.AddProductToCart(cartRequest));
+        }
     }
 }

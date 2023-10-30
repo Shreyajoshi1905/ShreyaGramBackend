@@ -10,5 +10,9 @@ namespace ShreyaGramBackend.Services.Book
     {
         Task<ServiceResponse<List<BookModel>>> BookAdd(BookModel book);
         Task<ServiceResponse<List<BookModel>>>GetAllBooks();
+        Task<ServiceResponse<BookModel>>GetBookById(int BookId);
+        Task<ServiceResponse<string>>CreateCart(string userName);
+        Task<ServiceResponse<List<ProductDetailsModel>>>AddProductToCart(CartRequestModel cr);
+
     }
 }

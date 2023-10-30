@@ -15,6 +15,11 @@ namespace ShreyaGramBackend.Data
         //public DbSet<BlogsModel>Blogs{get;set;}
         public DbSet<ClientBlogModel>BlogsTable{get;set;}
         public DbSet<BookModel> Books{get;set;}
+        public DbSet<CartModel> CartTest{get;set;}
+        public DbSet<ProductDetailsModel> ProductDetailsCart{get;set;}
+        
+        // public DbSet<ProductDetailsModel>ProductDetailCartTable{get;set;}
+
         // protected override void OnModelCreating(ModelBuilder modelBuilder)
         // {
         //     modelBuilder.Entity<BlogsModel>()
